@@ -1,0 +1,91 @@
+
+import React from 'react';
+import { CrosshairIcon } from 'lucide-react';
+
+interface AmmoDisplayProps {
+  ammo: number;
+  maxAmmo: number;
+  isReloading: boolean;
+}
+
+const AmmoDisplay: React.FC<AmmoDisplayProps> = ({ ammo, maxAmmo, isReloading }) => {
+  return (
+    <div className="p-2 bg-game-ui-bg rounded flex items-center gap-2 text-white">
+      <CrosshairIcon className="w-5 h-5" />
+      <div className="flex gap-[2px]">
+        {Array.from({ length: maxAmmo }).map((_, index) => (
+          <div 
+            key={`ammo-${index}`}
+            className={`w-1 h-5 rounded-sm ${index < ammo ? 'bg-yellow-400' : 'bg-gray-700'}`}
+          />
+        ))}
+      </div>
+      <span className="text-sm font-bold min-w-[40px]">
+        {isReloading ? 'Reloading...' : `${ammo}/${maxAmmo}`}
+      </span>
+    </div>
+  );
+};
+
+export default AmmoDisplay;
+
+
+import React, { useState } from 'react';
+import { Button } from "@/components/ui/button";
+import { Shield, CrosshairIcon, Target } from "lucide-react";
+
+interface GameInstructionsProps {
+  onStart: () => void;
+}
+
+const GameInstructions: React.FC<GameInstructionsProps> = ({ onStart }) => {
+  return (
+    <div className="absolute inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50">
+      <div className="bg-gray-900 p-8 rounded-lg border border-green-500 shadow-lg max-w-lg">
+        <h1 className="text-green-500 text-3xl font-bold mb-4 text-center">FREE FIRE MISSION</h1>
+        
+        <div className="flex justify-center mb-6">
+          <div className="flex gap-4">
+            <Shield className="w-8 h-8 text-blue-400" />
+            <Target className="w-8 h-8 text-red-500" />
+            <CrosshairIcon className="w-8 h-8 text-yellow-400" />
+          </div>
+        </div>
+        
+        <div className="space-y-4 text-gray-200 mb-6">
+          <p className="text-xl">Your mission is to search and eliminate all enemies across the 5km terrain.</p>
+          
+          <div className="bg-gray-800 p-4 rounded">
+            <h3 className="font-bold text-green-400 mb-2">CONTROLS:</h3>
+            <ul className="space-y-2">
+              <li><span className="font-bold">WASD or Arrow Keys:</span> Move around the map</li>
+              <li><span className="font-bold">Spacebar:</span> Shoot</li>
+              <li><span className="font-bold">R:</span> Reload weapon</li>
+            </ul>
+          </div>
+          
+          <div>
+            <h3 className="font-bold text-yellow-400 mb-1">ENEMY STATES:</h3>
+            <ul>
+              <li><span className="text-green-500">●</span> Idle - Not aware of your presence</li>
+              <li><span className="text-yellow-500">●</span> Patrol - Searching the area</li>
+              <li><span className="text-orange-500">●</span> Chase - Following your trail</li>
+              <li><span className="text-red-500">●</span> Attack - Actively engaging you</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div className="flex justify-center">
+          <Button 
+            onClick={onStart} 
+            className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 text-lg"
+          >
+            Start Mission
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default GameInstructions;
